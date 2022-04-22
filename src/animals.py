@@ -1,6 +1,3 @@
-from logging.config import DEFAULT_LOGGING_CONFIG_PORT
-
-
 NOISES = {
     "bird": "tweet",
     "cat": "meow",
