@@ -1,14 +1,14 @@
-import click
-from animals import speak
+from flask import Flask, flash, request, render_template
+from .animals import speak
+
+app = Flask(__name__)
 
 
-@click.command()
-@click.option("--animal_type", help="The type of animal to hear a noise from")
-@click.option("--animal_name", help="The animal's name")
-def main(animal_type: str, animal_name: str):
-    noise = speak(animal_type)
-    click.echo(f"{animal_name} says {noise}")
+@app.route("/statusz")
+def statusz():
+    return "<p>All systems go!</p>"
 
 
-if __name__ == "__main__":
-    main()
+@app.route("/")
+def index():
+    return render_template("index.html")

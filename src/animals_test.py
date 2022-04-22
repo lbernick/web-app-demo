@@ -1,4 +1,4 @@
-from animals import speak
+from .animals import speak
 
 
 def test_speak():
