@@ -8,6 +8,7 @@ app = Flask(__name__)
 def animals():
     return jsonify(list(NOISES.keys()))
 
+
 @app.route("/animals/<animal>")
 def make_noise(animal):
     return speak(animal)
