@@ -10,6 +10,7 @@ NOISES = {
     "mouse": "squeak",
     "sheep": "baa",
     "snake": "hiss",
+    "robotcat": "beep boop meow"
 }
 
 DEFAULT_NOISE = "Unknown animal"
