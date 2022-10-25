@@ -12,8 +12,8 @@ NOISES = {
     "snake": "hiss",
 }
 
-DEFAULT_NOISE = "Ring-ding-ding-ding-dingeringeding!"
+DEFAULT_NOISE = "Unknown animal"
 
 
 def speak(animal_name: str) -> str:
-    return NOISES.get(animal_name, DEFAULT_NOISE)
+    return NOISES.get(animal_name, DEFAULT_NOISE) + "\n"
