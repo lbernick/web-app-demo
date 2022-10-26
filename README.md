@@ -51,3 +51,4 @@ If the container is already running (with container name "web-app-demo-container
 unit tests can also be executed with `docker exec`:
 
 `docker exec web-app-demo-container python -m pytest`
+
