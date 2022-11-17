@@ -16,17 +16,6 @@ metadata:
     pipelinesascode.tekton.dev/task: ".tekton/tasks/kaniko-build.yaml"
     pipelinesascode.tekton.dev/task-1: ".tekton/tasks/git-clone.yaml"
 
-    # Use maven task from hub
-    #
-    # pipelinesascode.tekton.dev/task-1: "maven"
-
-    # You can add more tasks by increasing the suffix number, you can specify them as array to have multiple of them.
-    # browse the tasks you want to include from hub on https://hub.tekton.dev/
-    #
-    # pipelinesascode.tekton.dev/task-2: "[curl, buildah]"
-
-    # How many runs we want to keep.
-    # pipelinesascode.tekton.dev/max-keep-runs: "5"
 spec:
   params:
     # The variable with brackets are special to Pipelines as Code

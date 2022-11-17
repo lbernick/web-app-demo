@@ -1,0 +1,1 @@
+This folder contains configuration for Pipelines as Code.
