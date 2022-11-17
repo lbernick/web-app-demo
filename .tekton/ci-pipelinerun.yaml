@@ -6,16 +6,15 @@ metadata:
   annotations:
     # The event we are targeting as seen from the webhook payload
     # this can be an array too, i.e: [pull_request, push]
-    pipelinesascode.tekton.dev/on-event: "[push]"
+    pipelinesascode.tekton.dev/on-event: "[pull_request]"
 
     # The branch or tag we are targeting (ie: main, refs/tags/*)
     pipelinesascode.tekton.dev/on-target-branch: "[main]"
 
-    # Fetch the git-clone task from hub, we are able to reference later on it
+    # Fetch the pytest task from hub, we are able to reference later on it
     # with taskRef and it will automatically be embedded into our pipeline.
-    pipelinesascode.tekton.dev/task: ".tekton/tasks/kaniko-build.yaml"
+    pipelinesascode.tekton.dev/task: "pytest"
     pipelinesascode.tekton.dev/task-1: ".tekton/tasks/git-clone.yaml"
-
 spec:
   params:
     # The variable with brackets are special to Pipelines as Code
@@ -24,13 +23,10 @@ spec:
       value: "{{ repo_url }}"
     - name: revision
       value: "{{ revision }}"
-    - name: image
-      value: us-east1-docker.pkg.dev/tekton-interns/leebernick/web-app-demo
   pipelineSpec:
     params:
       - name: repo_url
       - name: revision
-      - name: image
     workspaces:
       - name: source
     tasks:
@@ -45,17 +41,14 @@ spec:
             value: $(params.repo_url)
           - name: revision
             value: $(params.revision)
-      - name: build-and-push
+      - name: unittests
         runAfter:
           - fetch-repository
         workspaces:
-          - name: source-code
+          - name: source
             workspace: source
-        params:
-        - name: image
-          value: $(params.image)
         taskRef:
-          name: kaniko-build
+          name: pytest
   workspaces:
   - name: source
     volumeClaimTemplate:
@@ -65,6 +58,3 @@ spec:
         resources:
           requests:
             storage: 1Gi
-  taskRunSpecs:
-  - pipelineTaskName: build-and-push
-    taskServiceAccountName: pac-builder
