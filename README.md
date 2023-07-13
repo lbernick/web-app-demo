@@ -5,7 +5,7 @@
 - Install requirements within virtualenv: `pip3 install -r requirements.txt` (only when requirements change)
 - Deactivate virtualenv (when done using it): `deactivate`
 
-Run flask app:
+### Run flask app
 
 ```
 export FLASK_APP=src.main
@@ -13,7 +13,13 @@ export FLASK_DEBUG=1  # hot-reloads application when code changes
 flask run
 ```
 
+Flask defaults to port 5000. You can select a different port with `flask run -p <port>`.
+
 Visit http://localhost:5000 to view the app.
+
+Start up the database in the background and forward the container port 6379 to the host port 6379:
+
+`docker run -d -p 6379:6379 redis`
 
 ### Lint
 
@@ -21,7 +27,11 @@ Within virtualenv: `black src --check`
 
 ### Unit Tests
 
-Within virtualenv: `python -m pytest`
+Within virtualenv: `python -m pytest ./src`
+
+### Integration Tests
+
+Within virtualenv: `python -m pytest ./test`
 
 ## Build and run with Docker
 
@@ -45,10 +55,43 @@ lint can also be executed with `docker exec`:
 
 ### Unit Tests
 
-`docker run web-app-demo python -m pytest`
+`docker run web-app-demo python -m pytest ./src`
 
 If the container is already running (with container name "web-app-demo-container"),
 unit tests can also be executed with `docker exec`:
 
-`docker exec web-app-demo-container python -m pytest`
+`docker exec web-app-demo-container python -m pytest ./src`
 
+## Build and run with docker compose
+
+Start the database and web app: `docker-compose up`
+
+Note: This does not allow changing the ports these applications run on.
+
+To delete the running containers and docker network: `docker-compose down`
+
+Note: killing the process running `docker-compose up` stops the containers but does not delete them.
+
+### Integration tests
+
+After running `docker-compose up`, integration tests can be run within the virtualenv:
+
+`python -m pytest ./test`
+
+## Interact with database
+
+Requires [installing redis](https://redis.io/docs/getting-started/installation/install-redis-on-linux/)
+
+```
+$ redis-cli -p 6379
+127.0.0.1:6379> monitor
+OK
+```
+
+## Endpoints
+
+- Get some friendly greetings at /
+- Check app status at /statusz
+- View supported animals at /animals
+- Get an animal noise at /animals/<animal_name>
+- Get the page hit count at /hits (requires database)
