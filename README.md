@@ -1,3 +1,5 @@
+I use this repo for testing CI/CD.
+
 ## Build and run locally
 
 - Create a virtualenv: `python3 -m venv .venv` (only need to run once).
@@ -39,10 +41,21 @@ Build the repo and tag the resulting image with "web-app-demo:latest":
 
 `docker build . -t web-app-demo`
 
-Run the image in a container named "web-app-demo-container", and forward the container port
-5000 to the host port 5000:
+Create a network named "web-app-demo" to allow the app container to connect to the database container:
 
-`docker run -p 5000:5000 --name web-app-demo-container web-app-demo`
+`docker network create web-app-demo`
+
+Start up the database container named "database", connect it to the web-app-demo network, and expose its port 6379:
+
+`docker run -d -p 6379:6379 --network web-app-demo --name database redis`
+
+Run the image in a container named "web-app-demo-container", connect it to the web-app-demo network,
+expose its port 5000, and tell it how to reach the database container:
+
+`docker run -p 5000:5000 --name web-app-demo-container --network web-app-demo -e REDIS_HOST=database web-app-demo`
+
+Note: the REDIS_HOST environment variable must match the container name used for the database.
+This will not work for generated container names.
 
 ### Lint
 
